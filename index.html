@@ -102,12 +102,50 @@
     .success-desc { font-size: 15px; color: rgba(255,255,255,0.92); line-height: 1.7; }
 
     .loading { text-align: center; padding: 60px 16px; color: rgba(255,255,255,0.9); font-size: 15px; }
+
+    /* Loading overlay */
+    .loading-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 999;
+      background: linear-gradient(180deg, #8b5cf6 0%, #6366f1 28%, #2563eb 62%, #0ea5e9 100%);
+      flex-direction: column; align-items: center; justify-content: center;
+    }
+    .loading-overlay.active { display: flex; }
+    .loading-logo {
+      width: 120px; height: 120px; object-fit: contain;
+      animation: logoPulse 1.4s ease-in-out infinite;
+      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.35));
+    }
+    .loading-text {
+      margin-top: 28px; color: #fff; font-family: 'Baloo 2','Noto Sans TC',sans-serif;
+      font-size: 18px; font-weight: 800; letter-spacing: 2px;
+      opacity: 0.9;
+    }
+    .loading-dots::after {
+      content: '';
+      animation: dots 1.4s steps(4, end) infinite;
+    }
+    @keyframes logoPulse {
+      0%, 100% { transform: scale(1);   opacity: 1; }
+      50%       { transform: scale(1.1); opacity: 0.75; }
+    }
+    @keyframes dots {
+      0%   { content: ''; }
+      25%  { content: '.'; }
+      50%  { content: '..'; }
+      75%  { content: '...'; }
+    }
   </style>
 </head>
 <body>
 <div class="container">
 
-  <div class="banner"><img src="topbar.jpg" alt="英雄所踐略同"></div>
+  <div class="loading-overlay" id="loading-overlay">
+    <img class="loading-logo" src="images/LINE Logo.png" alt="載入中">
+    <div class="loading-text">送出中<span class="loading-dots"></span></div>
+  </div>
+
+  <div class="banner"><img src="images/topbar.jpg" alt="英雄所踐略同"></div>
 
   <div class="topbar">
     <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
@@ -355,8 +393,8 @@
       config.actors.forEach(function(actor) {
         optionsHtml += '<div class="option" id="sopt-' + scene + '-' + actor + '" onclick="selectScene(\'' + scene + '\', \'' + actor + '\')">' +
           '<div class="option-dot"></div>' +
-          '<div><div class="option-text">' + actor + '</div>' +
-          '<div class="option-sub">飾：' + (roleChoices[actor] || '') + '</div></div></div>';
+          '<div><div class="option-text">' + (roleChoices[actor] || actor) + '</div>' +
+          '<div class="option-sub">由 ' + actor + ' 飾演</div></div></div>';
       });
       card.innerHTML = '<div class="card-title">橋段「' + scene + '」</div>' +
         '<div class="card-sub">請選擇主演（再點一次可取消）</div>' +
@@ -418,7 +456,7 @@
     }).join('');
     document.getElementById('summary-scenes').innerHTML = config.scenes.map(function(scene) {
       var actor = sceneChoices[scene];
-      return '<div class="summary-item"><span class="summary-label">' + scene + '</span><span class="summary-value">' + actor + '<br><span style="font-size:12px;color:#8e8e93;">飾 ' + roleChoices[actor] + '</span></span></div>';
+      return '<div class="summary-item"><span class="summary-label">' + scene + '</span><span class="summary-value">' + (roleChoices[actor] || actor) + '<br><span style="font-size:12px;color:#8e8e93;">由 ' + actor + ' 飾演</span></span></div>';
     }).join('');
   }
 
@@ -436,13 +474,24 @@
   // =====================
   // 送出
   // =====================
+  function buildScenePayload() {
+    var result = {};
+    Object.keys(sceneChoices).forEach(function(scene) {
+      var actor = sceneChoices[scene];
+      result[scene] = roleChoices[actor] || actor;
+    });
+    return result;
+  }
+
   function submitVote() {
+    document.getElementById('loading-overlay').classList.add('active');
     fetch(API_URL, {
       method: 'POST',
-      body: JSON.stringify({ roles: roleChoices, scenes: sceneChoices, seat: seatInfo })
+      body: JSON.stringify({ roles: roleChoices, scenes: buildScenePayload(), seat: seatInfo })
     })
     .then(function(r) { return r.json(); })
     .then(function(result) {
+      document.getElementById('loading-overlay').classList.remove('active');
       if (result.success) {
         showPage('page5');
         updateHeader(5);
@@ -451,6 +500,7 @@
       }
     })
     .catch(function() {
+      document.getElementById('loading-overlay').classList.remove('active');
       alert('網路錯誤，請再試一次');
     });
   }
