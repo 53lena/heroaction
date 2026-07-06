@@ -8,19 +8,15 @@
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     html, body { width: 100%; overflow-x: hidden; }
     body { font-family: -apple-system, 'Noto Sans TC', sans-serif; background: #f2f2f7; color: #1c1c1e; font-size: 16px; min-height: 100vh; }
-
     .container { width: 100%; max-width: 480px; margin: 0 auto; padding: 0 0 24px; }
-
     .header { background: #4A90E2; color: white; padding: 20px 16px 0; text-align: center; position: sticky; top: 0; z-index: 100; width: 100%; }
     .header h1 { font-size: 18px; font-weight: 700; }
     .header .step-info { font-size: 13px; opacity: 0.85; margin-top: 4px; padding-bottom: 12px; }
     .progress-bar { height: 4px; background: rgba(255,255,255,0.3); }
     .progress-fill { height: 4px; background: white; transition: width 0.4s; }
-
     .card { background: white; border-radius: 12px; padding: 16px; margin: 10px 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); width: calc(100% - 24px); }
     .card-title { font-size: 17px; font-weight: 700; color: #1c1c1e; }
     .card-sub { font-size: 13px; color: #8e8e93; margin-top: 4px; }
-
     .options { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
     .option { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 2px solid #e5e5ea; border-radius: 12px; cursor: pointer; transition: all 0.15s; min-height: 54px; user-select: none; }
     .option:active { transform: scale(0.98); }
@@ -31,17 +27,14 @@
     .option.selected .option-dot::after { content: ''; width: 8px; height: 8px; background: white; border-radius: 50%; }
     .option-text { font-size: 16px; font-weight: 500; }
     .option-sub { font-size: 13px; color: #8e8e93; margin-top: 2px; }
-
     .bottom-bar { padding: 8px 12px 24px; display: flex; flex-direction: column; gap: 8px; width: calc(100% - 24px); margin: 0 12px; }
     .btn { width: 100%; padding: 18px; border: none; border-radius: 12px; font-size: 17px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
     .btn:active { transform: scale(0.98); }
     .btn-primary { background: #4A90E2; color: white; }
     .btn-primary:disabled { background: #c7c7cc; cursor: not-allowed; }
     .btn-back { background: #f2f2f7; color: #4A90E2; font-size: 15px; padding: 12px; }
-
     .page { display: none; }
     .page.active { display: block; }
-
     .code-wrap { text-align: center; padding: 32px 16px; }
     .code-icon { font-size: 56px; margin-bottom: 16px; }
     .code-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
@@ -49,37 +42,30 @@
     .code-input { width: 100%; padding: 18px; font-size: 28px; text-align: center; border: 2px solid #e5e5ea; border-radius: 12px; letter-spacing: 10px; outline: none; }
     .code-input:focus { border-color: #4A90E2; }
     .code-error { color: #ff3b30; font-size: 14px; margin-top: 8px; display: none; }
-
     .seat-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
     .seat-field label { font-size: 13px; color: #8e8e93; margin-bottom: 6px; display: block; font-weight: 500; }
     .seat-field input { width: 100%; padding: 14px 12px; font-size: 17px; border: 2px solid #e5e5ea; border-radius: 10px; outline: none; }
     .seat-field input:focus { border-color: #4A90E2; }
     .seat-hint { font-size: 12px; color: #8e8e93; margin-top: 12px; text-align: center; }
     .seat-error { color: #ff3b30; font-size: 13px; margin-top: 8px; display: none; }
-
     .summary-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f2f2f7; }
     .summary-item:last-child { border-bottom: none; }
     .summary-label { font-size: 15px; color: #8e8e93; }
     .summary-value { font-size: 15px; font-weight: 600; color: #1c1c1e; text-align: right; max-width: 60%; }
-
     .success-wrap { text-align: center; padding: 60px 16px; }
     .success-icon { font-size: 72px; margin-bottom: 20px; }
     .success-title { font-size: 24px; font-weight: 700; color: #34c759; margin-bottom: 8px; }
     .success-desc { font-size: 15px; color: #8e8e93; }
-
-    .loading { text-align: center; padding: 60px 16px; color: #8e8e93; font-size: 15px; }
   </style>
 </head>
 <body>
 <div class="container">
-
   <div class="header">
     <h1>🎭 角色與橋段投票</h1>
     <div class="step-info" id="header-step">請輸入驗證碼</div>
     <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
   </div>
 
-  <!-- Page 0：驗證碼 -->
   <div class="page active" id="page0">
     <div class="code-wrap">
       <div class="code-icon">🔐</div>
@@ -90,10 +76,10 @@
     </div>
     <div class="bottom-bar">
       <button class="btn btn-primary" onclick="verifyCode()">確認驗證 →</button>
+      <button class="btn btn-back" onclick="skipToPage1()" style="font-size:12px;opacity:0.5;">（預覽用）跳過驗證</button>
     </div>
   </div>
 
-  <!-- Page 1：座位 -->
   <div class="page" id="page1">
     <div class="card">
       <div class="card-title">📍 請填入座位資訊</div>
@@ -112,7 +98,6 @@
     </div>
   </div>
 
-  <!-- Page 2：選角色 -->
   <div class="page" id="page2">
     <div id="step1-cards"></div>
     <div class="bottom-bar">
@@ -121,7 +106,6 @@
     </div>
   </div>
 
-  <!-- Page 3：選橋段主演 -->
   <div class="page" id="page3">
     <div id="step2-cards"></div>
     <div class="bottom-bar">
@@ -130,7 +114,6 @@
     </div>
   </div>
 
-  <!-- Page 4：確認送出 -->
   <div class="page" id="page4">
     <div class="card">
       <div class="card-title">📍 座位資訊</div>
@@ -150,7 +133,6 @@
     </div>
   </div>
 
-  <!-- Page 5：完成 -->
   <div class="page" id="page5">
     <div class="success-wrap">
       <div class="success-icon">🎉</div>
@@ -158,78 +140,64 @@
       <div class="success-desc">感謝您的參與<br>您的投票已成功送出</div>
     </div>
   </div>
-
 </div>
 
 <script>
-  // ← 把你的 Apps Script 部署網址貼在這裡
-  var API_URL = 'https://script.google.com/macros/s/AKfycbwqElVFZOm9Ps6AjSc2A7bwNzAhDWrDwRNbZb9sbeaoryhJFiR6dEtrVSJmowIQ48So/exec';
-
-  var config = {};
+  var API_URL = '在這裡貼上Apps_Script部署網址';
+  var config = {
+    actors: ['演員A', '演員B', '演員C', '演員D', '演員E', '演員F'],
+    roles: ['角色1', '角色2', '角色3', '角色4', '角色5', '角色6'],
+    scenes: ['橋段a', '橋段b', '橋段c', '橋段d', '橋段e', '橋段f']
+  };
   var roleChoices = {};
   var sceneChoices = {};
   var seatInfo = {};
-
   var stepTitles = ['請輸入驗證碼', '填寫座位資訊', '第一階段：選擇角色', '第二階段：橋段主演', '確認您的投票', '投票完成'];
   var stepProgress = [0, 20, 40, 65, 85, 100];
 
-  // 載入設定
-  fetch(API_URL + '?action=getConfig')
-    .then(function(r) { return r.json(); })
-    .then(function(data) { config = data; });
+  if (API_URL.indexOf('在這裡') === -1) {
+    fetch(API_URL + '?action=getConfig')
+      .then(function(r) { return r.json(); })
+      .then(function(data) { config = data; });
+  }
 
   function updateHeader(step) {
     document.getElementById('header-step').textContent = stepTitles[step];
     document.getElementById('progress').style.width = stepProgress[step] + '%';
   }
 
-  // =====================
-  // Page 0：驗證碼
-  // =====================
+  function skipToPage1() { showPage('page1'); updateHeader(1); }
+
   function verifyCode() {
     var code = document.getElementById('code-input').value.trim();
     var errorEl = document.getElementById('code-error');
+    if (API_URL.indexOf('在這裡') !== -1) {
+      if (code === 'ABC123') { errorEl.style.display = 'none'; showPage('page1'); updateHeader(1); }
+      else { errorEl.style.display = 'block'; document.getElementById('code-input').value = ''; }
+      return;
+    }
     fetch(API_URL + '?action=verifyCode&code=' + encodeURIComponent(code))
       .then(function(r) { return r.json(); })
       .then(function(result) {
-        if (result.success) {
-          errorEl.style.display = 'none';
-          showPage('page1');
-          updateHeader(1);
-        } else {
-          errorEl.style.display = 'block';
-          document.getElementById('code-input').value = '';
-        }
+        if (result.success) { errorEl.style.display = 'none'; showPage('page1'); updateHeader(1); }
+        else { errorEl.style.display = 'block'; document.getElementById('code-input').value = ''; }
       });
   }
 
-  document.getElementById('code-input').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') verifyCode();
-  });
+  document.getElementById('code-input').addEventListener('keydown', function(e) { if (e.key === 'Enter') verifyCode(); });
 
-  // =====================
-  // Page 1：座位
-  // =====================
   function submitSeat() {
     var floor = document.getElementById('seat-floor').value.trim();
     var area = document.getElementById('seat-area').value.trim();
     var row = document.getElementById('seat-row').value.trim();
     var num = document.getElementById('seat-num').value.trim();
     var errorEl = document.getElementById('seat-error');
-    if (!floor || !area || !row || !num) {
-      errorEl.style.display = 'block';
-      return;
-    }
+    if (!floor || !area || !row || !num) { errorEl.style.display = 'block'; return; }
     errorEl.style.display = 'none';
     seatInfo = { floor: floor, area: area, row: row, num: num };
-    showPage('page2');
-    updateHeader(2);
-    renderStep1();
+    showPage('page2'); updateHeader(2); renderStep1();
   }
 
-  // =====================
-  // Page 2：選角色
-  // =====================
   function renderStep1() {
     var container = document.getElementById('step1-cards');
     container.innerHTML = '';
@@ -239,34 +207,19 @@
       var optionsHtml = '';
       config.roles.forEach(function(role) {
         optionsHtml += '<div class="option" id="opt-' + actor + '-' + role + '" onclick="selectRole(\'' + actor + '\', \'' + role + '\')">' +
-          '<div class="option-dot"></div>' +
-          '<div class="option-text">' + role + '</div></div>';
+          '<div class="option-dot"></div><div class="option-text">' + role + '</div></div>';
       });
-      card.innerHTML = '<div class="card-title">' + actor + '</div>' +
-        '<div class="card-sub">請選擇角色（再點一次可取消）</div>' +
-        '<div class="options">' + optionsHtml + '</div>';
+      card.innerHTML = '<div class="card-title">' + actor + '</div><div class="card-sub">請選擇角色（再點一次可取消）</div><div class="options">' + optionsHtml + '</div>';
       container.appendChild(card);
     });
   }
 
   function selectRole(actor, role) {
-    if (roleChoices[actor] === role) {
-      delete roleChoices[actor];
-      refreshRoleUI();
-      checkStep1Complete();
-      return;
-    }
+    if (roleChoices[actor] === role) { delete roleChoices[actor]; refreshRoleUI(); checkStep1Complete(); return; }
     var takenBy = null;
-    Object.keys(roleChoices).forEach(function(a) {
-      if (roleChoices[a] === role && a !== actor) takenBy = a;
-    });
-    if (takenBy) {
-      alert('「' + role + '」已被 ' + takenBy + ' 選擇，請選其他角色');
-      return;
-    }
-    roleChoices[actor] = role;
-    refreshRoleUI();
-    checkStep1Complete();
+    Object.keys(roleChoices).forEach(function(a) { if (roleChoices[a] === role && a !== actor) takenBy = a; });
+    if (takenBy) { alert('「' + role + '」已被 ' + takenBy + ' 選擇，請選其他角色'); return; }
+    roleChoices[actor] = role; refreshRoleUI(); checkStep1Complete();
   }
 
   function refreshRoleUI() {
@@ -276,11 +229,8 @@
         var el = document.getElementById('opt-' + actor + '-' + role);
         if (!el) return;
         el.classList.remove('selected', 'disabled');
-        if (roleChoices[actor] === role) {
-          el.classList.add('selected');
-        } else if (takenRoles.indexOf(role) !== -1) {
-          el.classList.add('disabled');
-        }
+        if (roleChoices[actor] === role) el.classList.add('selected');
+        else if (takenRoles.indexOf(role) !== -1) el.classList.add('disabled');
       });
     });
   }
@@ -290,20 +240,9 @@
     document.getElementById('btn2').disabled = !complete;
   }
 
-  function goToStep3() {
-    showPage('page3');
-    updateHeader(3);
-    renderStep2();
-  }
+  function goToStep3() { showPage('page3'); updateHeader(3); renderStep2(); }
+  function goBackTo1() { showPage('page1'); updateHeader(1); }
 
-  function goBackTo1() {
-    showPage('page1');
-    updateHeader(1);
-  }
-
-  // =====================
-  // Page 3：選橋段主演
-  // =====================
   function renderStep2() {
     var container = document.getElementById('step2-cards');
     container.innerHTML = '';
@@ -313,36 +252,29 @@
       var optionsHtml = '';
       config.actors.forEach(function(actor) {
         optionsHtml += '<div class="option" id="sopt-' + scene + '-' + actor + '" onclick="selectScene(\'' + scene + '\', \'' + actor + '\')">' +
-          '<div class="option-dot"></div>' +
-          '<div><div class="option-text">' + actor + '</div>' +
-          '<div class="option-sub">飾：' + (roleChoices[actor] || '') + '</div></div></div>';
+          '<div class="option-dot"></div><div><div class="option-text">' + (roleChoices[actor] || actor) + '</div><div class="option-sub">由 ' + actor + ' 飾演</div></div></div>';
       });
-      card.innerHTML = '<div class="card-title">橋段「' + scene + '」</div>' +
-        '<div class="card-sub">請選擇主演（再點一次可取消）</div>' +
-        '<div class="options">' + optionsHtml + '</div>';
+      card.innerHTML = '<div class="card-title">橋段「' + scene + '」</div><div class="card-sub">請選擇主演（再點一次可取消）</div><div class="options">' + optionsHtml + '</div>';
       container.appendChild(card);
     });
     refreshSceneUI();
   }
 
   function selectScene(scene, actor) {
-    if (sceneChoices[scene] === actor) {
-      delete sceneChoices[scene];
-      refreshSceneUI();
-      checkStep2Complete();
-      return;
-    }
+    if (sceneChoices[scene] === actor) { delete sceneChoices[scene]; refreshSceneUI(); checkStep2Complete(); return; }
     var takenBy = null;
-    Object.keys(sceneChoices).forEach(function(s) {
-      if (sceneChoices[s] === actor && s !== scene) takenBy = s;
+    Object.keys(sceneChoices).forEach(function(s) { if (sceneChoices[s] === actor && s !== scene) takenBy = s; });
+    if (takenBy) { alert('「' + actor + '」已在橋段「' + takenBy + '」主演，請選其他演員'); return; }
+    sceneChoices[scene] = actor; refreshSceneUI(); checkStep2Complete();
+  }
+
+  function getSceneRoles() {
+    var result = {};
+    Object.keys(sceneChoices).forEach(function(scene) {
+      var actor = sceneChoices[scene];
+      result[scene] = roleChoices[actor] || actor;
     });
-    if (takenBy) {
-      alert('「' + actor + '」已在橋段「' + takenBy + '」主演，請選其他演員');
-      return;
-    }
-    sceneChoices[scene] = actor;
-    refreshSceneUI();
-    checkStep2Complete();
+    return result;
   }
 
   function refreshSceneUI() {
@@ -352,11 +284,8 @@
         var el = document.getElementById('sopt-' + scene + '-' + actor);
         if (!el) return;
         el.classList.remove('selected', 'disabled');
-        if (sceneChoices[scene] === actor) {
-          el.classList.add('selected');
-        } else if (takenActors.indexOf(actor) !== -1) {
-          el.classList.add('disabled');
-        }
+        if (sceneChoices[scene] === actor) el.classList.add('selected');
+        else if (takenActors.indexOf(actor) !== -1) el.classList.add('disabled');
       });
     });
   }
@@ -367,56 +296,33 @@
   }
 
   function goToStep4() {
-    showPage('page4');
-    updateHeader(4);
+    showPage('page4'); updateHeader(4);
     document.getElementById('summary-seat').innerHTML =
-      '<div class="summary-item"><span class="summary-label">座位</span>' +
-      '<span class="summary-value">' + seatInfo.floor + '樓 / ' + seatInfo.area + '區 ' + seatInfo.row + '排 ' + seatInfo.num + '號</span></div>';
+      '<div class="summary-item"><span class="summary-label">座位</span><span class="summary-value">' + seatInfo.floor + '樓 / ' + seatInfo.area + '區 ' + seatInfo.row + '排 ' + seatInfo.num + '號</span></div>';
     document.getElementById('summary-roles').innerHTML = config.actors.map(function(actor) {
       return '<div class="summary-item"><span class="summary-label">' + actor + '</span><span class="summary-value">飾 ' + roleChoices[actor] + '</span></div>';
     }).join('');
     document.getElementById('summary-scenes').innerHTML = config.scenes.map(function(scene) {
       var actor = sceneChoices[scene];
-      return '<div class="summary-item"><span class="summary-label">' + scene + '</span><span class="summary-value">' + actor + '<br><span style="font-size:12px;color:#8e8e93;">飾 ' + roleChoices[actor] + '</span></span></div>';
+      var role = roleChoices[actor] || actor;
+      return '<div class="summary-item"><span class="summary-label">' + scene + '</span><span class="summary-value">' + role + '<br><span style="font-size:12px;color:#8e8e93;">由 ' + actor + ' 飾演</span></span></div>';
     }).join('');
   }
 
-  function goBackTo2() {
-    showPage('page2');
-    updateHeader(2);
-  }
+  function goBackTo2() { showPage('page2'); updateHeader(2); }
+  function goBackTo3() { showPage('page3'); updateHeader(3); renderStep2(); }
 
-  function goBackTo3() {
-    showPage('page3');
-    updateHeader(3);
-    renderStep2();
-  }
-
-  // =====================
-  // 送出
-  // =====================
   function submitVote() {
-    fetch(API_URL, {
-      method: 'POST',
-      body: JSON.stringify({ roles: roleChoices, scenes: sceneChoices, seat: seatInfo })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(result) {
-      if (result.success) {
-        showPage('page5');
-        updateHeader(5);
-      } else {
-        alert('送出失敗，請再試一次');
-      }
-    })
-    .catch(function() {
-      alert('網路錯誤，請再試一次');
-    });
+    if (API_URL.indexOf('在這裡') !== -1) { showPage('page5'); updateHeader(5); return; }
+    fetch(API_URL, { method: 'POST', body: JSON.stringify({ roles: roleChoices, scenes: getSceneRoles(), seat: seatInfo }) })
+      .then(function(r) { return r.json(); })
+      .then(function(result) {
+        if (result.success) { showPage('page5'); updateHeader(5); }
+        else { alert('送出失敗，請再試一次'); }
+      })
+      .catch(function() { alert('網路錯誤，請再試一次'); });
   }
 
-  // =====================
-  // 工具
-  // =====================
   function showPage(pageId) {
     document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
     document.getElementById(pageId).classList.add('active');
