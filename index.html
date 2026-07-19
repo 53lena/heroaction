@@ -60,6 +60,7 @@
     }
     .card-title { font-family: 'Baloo 2','Noto Sans TC',sans-serif; font-size: 19px; font-weight: 800; color: var(--ink); }
     .card-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    .story-text { font-size: 14px; line-height: 1.8; color: var(--ink); margin-top: 10px; text-align: justify; }
 
     .options { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
     .option { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 2px solid #e6e9f5; border-radius: 14px; cursor: pointer; transition: all 0.15s; min-height: 54px; user-select: none; background: #fafbff; }
@@ -318,6 +319,12 @@
   function renderStep1() {
     var container = document.getElementById('step1-cards');
     container.innerHTML = '';
+    var intro = document.createElement('div');
+    intro.className = 'card';
+    intro.innerHTML = '<div class="card-title">📖 前言</div>' +
+      '<div class="story-text">在夜市賣燒餅的武大郎跟武松是一對兄弟，他們的爸爸「老武」剛過世不久（被老虎吃掉），王婆便勾結慶記集團的富二代西門慶想要拿下餅舖這塊地都更圖利，想不到武大郎他婀娜多姿的老婆潘金蓮跟西門慶兩人一對上眼就互相吸引，於是兩方人馬就在各種賤招的攻防戰中僵持不下…</div>' +
+      '<div class="story-text">請依照每位演員的形象與特質，為他們選出最適合詮釋的角色吧！</div>';
+    container.appendChild(intro);
     config.actors.forEach(function(actor) {
       var card = document.createElement('div');
       card.className = 'card';
