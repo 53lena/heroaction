@@ -244,7 +244,12 @@
 <script>
   var API_URL = 'https://script.google.com/macros/s/AKfycbwqElVFZOm9Ps6AjSc2A7bwNzAhDWrDwRNbZb9sbeaoryhJFiR6dEtrVSJmowIQ48So/exec';
 
-  var config = {};
+  // 設定內嵌於前端，開頁不需呼叫後端（大量同時上線時可大幅降低後端負載）
+  var config = {
+    actors: ["曾國城", "大賤客", "鍾欣凌", "康茵茵", "唐從聖", "賤習生"],
+    roles: ["打虎威猛男—武松", "紈絝富二代—西門慶", "酒家媽媽桑—王婆", "性感狐狸精—潘金蓮", "傻憨燒餅哥—武大郎", "景陽崗惡虎—老虎"],
+    scenes: ["《吵架永遠只對鏡頭》", "《爭奪遺產車禍失憶》", "《生氣就要爆橘拳—恰恰》", "《靈魂交換》", "《 滴血認親》", "《 下毒陷害》"]
+  };
   var roleChoices = {};
   var sceneChoices = {};
   var seatInfo = {};
@@ -252,9 +257,22 @@
   var stepTitles = ['請輸入驗證碼', '填寫座位資訊', '第一階段：選擇角色', '第二階段：橋段主演', '確認您的投票', '投票完成'];
   var stepProgress = [0, 20, 40, 65, 85, 100];
 
-  fetch(API_URL + '?action=getConfig')
-    .then(function(r) { return r.json(); })
-    .then(function(data) { if (data && data.actors) config = data; });
+  // 帶自動重試的 fetch：僅在網路錯誤或非 2xx 時重試（採指數退避 + 隨機抖動，避免尖峰同時重試）
+  function fetchWithRetry(url, options, retries, delay) {
+    retries = (retries == null) ? 3 : retries;
+    delay = (delay == null) ? 800 : delay;
+    return fetch(url, options).then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r;
+    }).catch(function(err) {
+      if (retries <= 0) throw err;
+      return new Promise(function(resolve) {
+        setTimeout(resolve, delay + Math.random() * 400);
+      }).then(function() {
+        return fetchWithRetry(url, options, retries - 1, delay * 1.8);
+      });
+    });
+  }
 
   function updateHeader(step) {
     document.getElementById('header-step').textContent = stepTitles[step];
@@ -275,7 +293,7 @@
       return;
     }
 
-    fetch(API_URL + '?action=verifyCode&code=' + encodeURIComponent(code))
+    fetchWithRetry(API_URL + '?action=verifyCode&code=' + encodeURIComponent(code), undefined, 3, 800)
       .then(function(r) { return r.json(); })
       .then(function(result) {
         if (result.success) {
@@ -283,9 +301,14 @@
           showPage('page1');
           updateHeader(1);
         } else {
+          errorEl.textContent = '❌ 驗證碼錯誤，請重新輸入';
           errorEl.style.display = 'block';
           document.getElementById('code-input').value = '';
         }
+      })
+      .catch(function() {
+        errorEl.textContent = '⚠️ 目前連線繁忙，請稍候再按一次「確認驗證」';
+        errorEl.style.display = 'block';
       });
   }
 
@@ -496,15 +519,19 @@
     return result;
   }
 
+  var isSubmitting = false;
   function submitVote() {
+    if (isSubmitting) return; // 防止重複點擊造成重複送出
+    isSubmitting = true;
     document.getElementById('loading-overlay').classList.add('active');
-    fetch(API_URL, {
+    fetchWithRetry(API_URL, {
       method: 'POST',
       body: JSON.stringify({ roles: roleChoices, scenes: buildScenePayload(), seat: seatInfo })
-    })
+    }, 4, 1000)
     .then(function(r) { return r.json(); })
     .then(function(result) {
       document.getElementById('loading-overlay').classList.remove('active');
+      isSubmitting = false;
       if (result.success) {
         showPage('page5');
         updateHeader(5);
@@ -514,7 +541,8 @@
     })
     .catch(function() {
       document.getElementById('loading-overlay').classList.remove('active');
-      alert('網路錯誤，請再試一次');
+      isSubmitting = false;
+      alert('目前人潮眾多，送出失敗，請稍候再按一次「確認送出」');
     });
   }
 
