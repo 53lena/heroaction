@@ -483,8 +483,10 @@
     showPage('page4');
     updateHeader(4);
     document.getElementById('summary-seat').innerHTML =
+      '<div class="summary-item"><span class="summary-label">樓層/區域</span>' +
+      '<span class="summary-value">' + seatInfo.area + '</span></div>' +
       '<div class="summary-item"><span class="summary-label">座位</span>' +
-      '<span class="summary-value">' + seatInfo.area + ' ' + seatInfo.row + '排 ' + seatInfo.num + '號</span></div>';
+      '<span class="summary-value">' + seatInfo.row + '排 ' + seatInfo.num + '號</span></div>';
     document.getElementById('summary-roles').innerHTML = config.actors.map(function(actor) {
       return '<div class="summary-item"><span class="summary-label">' + actor + '</span><span class="summary-value">飾 ' + roleChoices[actor] + '</span></div>';
     }).join('');
