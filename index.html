@@ -247,7 +247,7 @@
   var config = {
     actors: ["曾國城", "大賤客", "鍾欣凌", "康茵茵", "唐從聖", "賤習生"],
     roles: ["打虎威猛男—武松", "紈絝富二代—西門慶", "酒家媽媽桑—王婆", "性感狐狸精—潘金蓮", "傻憨燒餅哥—武大郎", "景陽崗惡虎—老虎"],
-    scenes: ["《吵架永遠只對鏡頭》", "《爭奪遺產車禍失憶》", "《生氣就要爆橘拳—恰恰》", "《靈魂交換》", "《 滴血認親》", "《 下毒陷害》"]
+    scenes: ["《吵架永遠只對鏡頭》", "《爭奪遺產車禍失憶》", "《生氣就要爆橘拳—恰恰》", "《突兀的強制置入性行銷》", "《 滴血認親》", "《 下毒陷害》"]
   };
   var roleChoices = {};
   var sceneChoices = {};
@@ -439,27 +439,17 @@
   }
 
   function selectScene(scene, actor) {
+    // 每個橋段只能選一位主演；不同橋段可重複投同一人
     if (sceneChoices[scene] === actor) {
       delete sceneChoices[scene];
-      refreshSceneUI();
-      checkStep2Complete();
-      return;
+    } else {
+      sceneChoices[scene] = actor;
     }
-    var takenBy = null;
-    Object.keys(sceneChoices).forEach(function(s) {
-      if (sceneChoices[s] === actor && s !== scene) takenBy = s;
-    });
-    if (takenBy) {
-      alert('「' + actor + '」已在橋段「' + takenBy + '」主演，請選其他演員');
-      return;
-    }
-    sceneChoices[scene] = actor;
     refreshSceneUI();
     checkStep2Complete();
   }
 
   function refreshSceneUI() {
-    var takenActors = Object.values(sceneChoices);
     config.scenes.forEach(function(scene) {
       config.actors.forEach(function(actor) {
         var el = document.getElementById('sopt-' + scene + '-' + actor);
@@ -467,8 +457,6 @@
         el.classList.remove('selected', 'disabled');
         if (sceneChoices[scene] === actor) {
           el.classList.add('selected');
-        } else if (takenActors.indexOf(actor) !== -1) {
-          el.classList.add('disabled');
         }
       });
     });
