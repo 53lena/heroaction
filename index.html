@@ -155,12 +155,12 @@
   <div class="banner"><img src="images/topbar.jpg" alt="英雄所踐略同"></div>
 
   <div class="topbar">
-    <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
-    <div class="step-info" id="header-step">請輸入驗證碼</div>
+    <div class="progress-bar"><div class="progress-fill" id="progress" style="width:20%"></div></div>
+    <div class="step-info" id="header-step">填寫座位資訊</div>
   </div>
 
-  <!-- Page 0：驗證碼 -->
-  <div class="page active" id="page0">
+  <!-- Page 0：驗證碼（暫時隱藏，直接從填寫座位開始） -->
+  <div class="page" id="page0">
     <div class="code-wrap">
       <div class="code-icon">🔐</div>
       <div class="code-title">請輸入驗證碼</div>
@@ -174,7 +174,7 @@
   </div>
 
   <!-- Page 1：座位 -->
-  <div class="page" id="page1">
+  <div class="page active" id="page1">
     <div class="card">
       <div class="card-title">📍 請填入座位資訊</div>
       <div class="card-sub">例如：1樓 3排 12號 或 A區 3排 12號</div>
@@ -247,7 +247,7 @@
   var config = {
     actors: ["曾國城", "巡演大賤客（神秘嘉賓）", "鍾欣凌", "康茵茵", "唐從聖", "賤習生（觀眾挑戰者）"],
     roles: ["打虎威猛男—武松", "紈絝富二代—西門慶", "酒家媽媽桑—王婆", "性感狐狸精—潘金蓮", "傻憨燒餅哥—武大郎", "景陽崗惡虎—老虎"],
-    scenes: ["《吵架永遠只對鏡頭》", "《爭奪遺產車禍失憶》", "《生氣就要爆橘拳—恰恰》", "《突兀的強制置入性行銷》", "《 滴血認親》", "《 下毒陷害》"]
+    scenes: ["《吵架永遠只對鏡頭》", "《爭奪遺產車禍失憶》", "《生氣就要爆橘拳—恰恰》", "《突兀的強制置入性行銷》", "《 下毒陷害》"]
   };
   var roleChoices = {};
   var sceneChoices = {};
