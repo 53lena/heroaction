@@ -195,12 +195,12 @@
   <div class="page" id="page2">
     <div id="step1-cards"></div>
     <div class="bottom-bar">
-      <button class="btn btn-primary" id="btn2" onclick="goToStep3()" disabled>下一步：選擇橋段主演 →</button>
+      <button class="btn btn-primary" id="btn2" onclick="goToStep3()" disabled>下一步：選擇橋段主導 →</button>
       <button class="btn btn-back" onclick="goBackTo1()">← 返回修改座位</button>
     </div>
   </div>
 
-  <!-- Page 3：選橋段主演 -->
+  <!-- Page 3：選橋段主導 -->
   <div class="page" id="page3">
     <div id="step2-cards"></div>
     <div class="bottom-bar">
@@ -220,12 +220,12 @@
       <div id="summary-roles" style="margin-top:12px;"></div>
     </div>
     <div class="card">
-      <div class="card-title">🎬 橋段主演</div>
+      <div class="card-title">🎬 橋段主導</div>
       <div id="summary-scenes" style="margin-top:12px;"></div>
     </div>
     <div class="bottom-bar">
       <button class="btn btn-primary" onclick="submitVote()">✅ 確認送出</button>
-      <button class="btn btn-back" onclick="goBackTo3()">← 返回修改橋段主演</button>
+      <button class="btn btn-back" onclick="goBackTo3()">← 返回修改橋段主導</button>
     </div>
   </div>
 
@@ -246,14 +246,14 @@
   // 設定內嵌於前端，開頁不需呼叫後端（大量同時上線時可大幅降低後端負載）
   var config = {
     actors: ["曾國城", "巡演大賤客（神秘嘉賓）", "鍾欣凌", "康茵茵", "唐從聖", "賤習生（觀眾挑戰者）"],
-    roles: ["打虎威猛男—武松", "紈絝富二代—西門慶", "酒家媽媽桑—王婆", "性感狐狸精—潘金蓮", "傻憨燒餅哥—武大郎", "景陽崗惡虎—老虎"],
+    roles: ["打虎威猛男—武松","性感狐狸精—潘金蓮", "紈絝富二代—西門慶", "酒家媽媽桑—王婆", "傻憨燒餅哥—武大郎", "景陽崗惡虎—老虎"],
     scenes: ["《吵架永遠只對鏡頭》", "《爭奪遺產車禍失憶》", "《生氣就要爆橘拳—恰恰》", "《突兀的強制置入性行銷》", "《 下毒陷害》"]
   };
   var roleChoices = {};
   var sceneChoices = {};
   var seatInfo = {};
 
-  var stepTitles = ['請輸入驗證碼', '填寫座位資訊', '第一階段：選擇角色', '第二階段：橋段主演', '確認您的投票', '投票完成'];
+  var stepTitles = ['請輸入驗證碼', '填寫座位資訊', '第一階段：選擇角色', '第二階段：橋段主導', '確認您的投票', '投票完成'];
   var stepProgress = [0, 20, 40, 65, 85, 100];
 
   // 帶自動重試的 fetch：僅在網路錯誤或非 2xx 時重試（採指數退避 + 隨機抖動，避免尖峰同時重試）
@@ -415,7 +415,7 @@
   }
 
   // =====================
-  // Page 3：選橋段主演
+  // Page 3：選橋段主導
   // =====================
   function renderStep2() {
     var container = document.getElementById('step2-cards');
@@ -431,7 +431,7 @@
           '<div class="option-sub">由 ' + actor + ' 飾演</div></div></div>';
       });
       card.innerHTML = '<div class="card-title">橋段「' + scene + '」</div>' +
-        '<div class="card-sub">請選擇主演（再點一次可取消）</div>' +
+        '<div class="card-sub">請選擇主導（再點一次可取消）</div>' +
         '<div class="options">' + optionsHtml + '</div>';
       container.appendChild(card);
     });
@@ -439,7 +439,7 @@
   }
 
   function selectScene(scene, actor) {
-    // 每個橋段只能選一位主演；不同橋段可重複投同一人
+    // 每個橋段只能選一位主導；不同橋段可重複投同一人
     if (sceneChoices[scene] === actor) {
       delete sceneChoices[scene];
     } else {
